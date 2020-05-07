@@ -46,7 +46,7 @@ CREATE TABLE PASS_KEY
             pass_key = self.connect.execute("""
 SELECT pass_key
     FROM PASS_KEY pssKy
-    WHERE pssKy.service = %s AND pssKy.account = %s;
+    WHERE pssKy.service = '%s' AND pssKy.account = '%s';
 """ %(service, account))
 
             return pass_key
@@ -60,7 +60,7 @@ SELECT pass_key
         try:
             self.connect.execute("""
 INSERT INTO PASS_KEY(pass_key, service, account)
-    VALUES ({0}, {1}, {2});
+    VALUES ('{0}', '{1}', '{2}');
 """.format(pass_key, service, account))
         except:
             return 0
