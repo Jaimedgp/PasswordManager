@@ -23,10 +23,10 @@ class DataBase():
     def create_database(self):
         """ Create the database and tables to save passwords """
 
-        # Table with passwords and accounts information
-        self.connect.execute("""
+        try:
+            self.connect.execute("""
 CREATE TABLE PASS_KEY
-    idpass INTEGER NOT NULL,
+    idpass INTEGER AUTOINCREMENT,
     pass_key VARCHAR(200) NOT NULL UNIQUE,
     service VARCHAR(200) NOT NULL,
     account VARCHAR(200) NOT NULL,
@@ -35,15 +35,32 @@ CREATE TABLE PASS_KEY
 
     CONSTRAINT unq_srvc-accnt UNIQUE (service, account);
 """)
+        except:
+            return 0
 
 
     def get_pass_key(self, service, account):
         """ Get pass_key value for a certain service and account """
 
-        pass_key = self.connect.execute("""
+        try:
+            pass_key = self.connect.execute("""
 SELECT pass_key
     FROM PASS_KEY pssKy
     WHERE pssKy.service = %s AND pssKy.account = %s;
 """ %(service, account))
 
-        return pass_key
+            return pass_key
+        except:
+            return 0
+
+
+    def add_pass_key(self, pass_key, service, account):
+        """ Add a new pass_key into database """
+
+        try:
+            self.connect.execute("""
+INSERT INTO PASS_KEY(pass_key, service, account)
+    VALUES ({0}, {1}, {2});
+""".format(pass_key, service, account))
+        except:
+            return 0
