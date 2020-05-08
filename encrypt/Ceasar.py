@@ -1,7 +1,8 @@
 alphabet = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        + "abcdefghijklmnopqrstuvwxyz"
-        + "1234567890"
-        +",.?!@#$%&*(){}[]:;-_=+ ")
+            + "abcdefghijklmnopqrstuvwxyz"
+            + "1234567890"
+            +",.?!@#$%&*(){}[]:;-_=+ ")
+
 
 def encrypt(pass_key, shift):
     """ Encrypt pass_key using ceasar algorithm """
