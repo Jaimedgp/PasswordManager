@@ -22,7 +22,6 @@ def decipher(pass_key, width):
     characters = [letter for letter in pass_key]
 
     board = np.array(characters).reshape((width, numRows))
-    print(board)
     cipher = "".join(["".join(board[:, i]) for i in range(numRows)])
 
     return cipher.replace("<", "")
