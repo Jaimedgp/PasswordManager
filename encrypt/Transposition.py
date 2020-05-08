@@ -10,7 +10,6 @@ def encrypt(pass_key, width):
         characters.append("<")
 
     board = np.array(characters).reshape((numRows, width))
-    print(board)
     cipher = "".join(["".join(board[:, i]) for i in range(width)])
 
     return cipher
@@ -19,4 +18,11 @@ def encrypt(pass_key, width):
 def decipher(pass_key, width):
     """ Decipher pass_key using transposition algorithm """
 
-    pass
+    numRows = len(pass_key) // width
+    characters = [letter for letter in pass_key]
+
+    board = np.array(characters).reshape((width, numRows))
+    print(board)
+    cipher = "".join(["".join(board[:, i]) for i in range(numRows)])
+
+    return cipher.replace("<", "")
