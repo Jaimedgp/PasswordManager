@@ -14,9 +14,8 @@ class DataBase():
         self.connect = sqlite3.connect(database)
 
         # Check if database exists yet
-        try:
-            self.create_database()
-        except:
+        result = self.create_database()
+        if result == 0:
             print("Dabase exists")
 
 
@@ -25,16 +24,14 @@ class DataBase():
 
         try:
             self.connect.execute("""
-CREATE TABLE PASS_KEY
-    idpass INTEGER AUTOINCREMENT,
+CREATE TABLE PASS_KEY (
+    idpass INTEGER PRIMARY KEY AUTOINCREMENT,
     pass_key VARCHAR(200) NOT NULL UNIQUE,
     service VARCHAR(200) NOT NULL,
     account VARCHAR(200) NOT NULL,
 
-    PRIMARY KEY (idpass),
-
-    CONSTRAINT unq_srvc-accnt UNIQUE (service, account);
-""")
+    CONSTRAINT unq_srvc_accnt UNIQUE (service, account)
+    ); """)
         except:
             return 0
 
