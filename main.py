@@ -1,4 +1,4 @@
-from database import DataBase
+from KyManager.database import DataBase
 from getpass import getpass
 
 from hashlib import sha256
