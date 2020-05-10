@@ -60,7 +60,8 @@ if __name__ == '__main__':
 
             added = DB.add_pass_key(pass_key, service.lower(), account)
             if added:
-                print("Done!")
+                print()
+                print("\t Done!")
 
         elif option == "cp":
             service = input("\tService> ")
@@ -69,7 +70,8 @@ if __name__ == '__main__':
 
             change = DB.change_pass_key(new_key, service.lower(), account)
             if change:
-                print("Changed!")
+                print()
+                print("\tChanged!")
 
         elif option == "gp":
             service = input("\tService> ")
@@ -94,5 +96,3 @@ if __name__ == '__main__':
                 print_result(accounts)
 
         option = input(": ")
-
-
