@@ -28,7 +28,7 @@ def print_result(result):
 if __name__ == '__main__':
     print("Enter Master Password")
 
-    for i in range(3):
+    for j in range(3):
         pss = getpass(": ")
         if check_password(pss):
             break
@@ -45,12 +45,17 @@ if __name__ == '__main__':
         if option == "sp":
             service = input("\tService> ")
             account = input("\tAccount> ")
-            pass_key = create_pass_key()
+            pass_key = input("\tAuto-generate?[y/n]> ")
+
+            if pass_key in ["y", "yes", "s", "si", "Y", "Yes"]:
+                pass_key = create_pass_key()
+            else:
+                pass_key = input("\t\tKey> ")
 
             added = DB.add_pass_key(pass_key, service.lower(), account)
             if added:
                 print()
-                print("\t Done!")
+                print("\tDone!")
 
         elif option == "cp":
             service = input("\tService> ")
