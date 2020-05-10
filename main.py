@@ -1,7 +1,7 @@
 from KyManager.database import DataBase
+from KyManager.Password import check_password, create_pass_key
 from getpass import getpass
 
-from hashlib import sha256
 import sys
 import os
 
@@ -16,24 +16,12 @@ enter_menu = ("#"*15 + "\n" +
               "#"*35 + "\n")
 
 
-def check_password(pss_key):
-
-    pss_hash = '52120eb30a3aba0c70b2a7e0db51bd53969d7ca40f1653f7c110fb49b3e3c221'
-
-    new_hash = sha256(pss_key.encode('utf-8')).hexdigest()
-
-    if new_hash == pss_hash:
-        return True
-    else:
-        return False
-
-
 def print_result(result):
     """ Print the results of a database consult """
 
     print()
     for i, name in enumerate(result.fetchall()):
-        print("\t{0}) ".format(i) + name[0])
+        print("\t{0}) ".format(i+1) + name[0])
 
 
 if __name__ == '__main__':
@@ -56,7 +44,7 @@ if __name__ == '__main__':
         if option == "sp":
             service = input("\tService> ")
             account = input("\tAccount> ")
-            pass_key = input("\tKey> ")
+            pass_key = create_pass_key()
 
             added = DB.add_pass_key(pass_key, service.lower(), account)
             if added:
