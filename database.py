@@ -59,6 +59,7 @@ class DataBase():
                 INSERT INTO PASS_KEY(pass_key, service, account)
                     VALUES ('{0}', '{1}', '{2}');
                 """.format(pass_key, service, account))
+            self.connect.commit()
 
             return 1
         except:
