@@ -27,8 +27,8 @@ def create_pass_key():
 
     index = randint(0, len(alphabet), 32)
 
-    while (index[-1] != alphabet.index(" ")
-           or index[0] != alphabet.index(" ")):
+    while (index[-1] == alphabet.index(" ")
+           or index[0] == alphabet.index(" ")):
 
         index = randint(0, len(alphabet), 32)
 
