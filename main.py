@@ -50,7 +50,7 @@ if __name__ == '__main__':
             account = input("\tAccount> ")
             pass_key = input("\tKey> ")
 
-            added = DB.add_pass_key(pass_key, service, account)
+            added = DB.add_pass_key(pass_key, service.lower(), account)
             if added:
                 print("Done!")
 
@@ -59,7 +59,7 @@ if __name__ == '__main__':
             account = input("\tAccount> ")
             new_key = input("\tNew Key> ")
 
-            change = DB.change_pass_key(new_key, service, account)
+            change = DB.change_pass_key(new_key, service.lower(), account)
             if change:
                 print("Changed!")
 
@@ -67,7 +67,7 @@ if __name__ == '__main__':
             service = input("\tService> ")
             account = input("\tAccount> ")
 
-            result = DB.get_pass_key(service, account)
+            result = DB.get_pass_key(service.lower(), account)
             if result:
                 print(result.fetchone())
 
@@ -81,7 +81,7 @@ if __name__ == '__main__':
         elif option == "ga":
             service = input("\tService> ")
 
-            accounts = DB.get_accounts(service)
+            accounts = DB.get_accounts(service.lower())
             if accounts:
                 print(accounts.fetchone())
 
