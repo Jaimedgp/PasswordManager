@@ -14,6 +14,8 @@ enter_menu = ("#"*25 + "\n" +
               "## gs => get services\n" +
               "## ga => get account\n" +
               "## gall => get all acounts and services\n" +
+              "##\n" +
+              "## help => Get help menu again\n" +
               "#"*35 + "\n")
 
 
@@ -118,5 +120,7 @@ if __name__ == '__main__':
             result = DB.get_all()
             if result:
                 print_result(result)
+        elif option in ["help", "Help"]:
+            print(enter_menu)
 
         option = input(": ")
