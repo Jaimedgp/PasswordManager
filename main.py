@@ -25,6 +25,68 @@ def print_result(result):
         print("\t{0}) ".format(i+1) + " -> ".join(name))
 
 
+def set_passKey(DB):
+    """ UI to set a new password """
+
+    service = input("\tService> ")
+    account = input("\tAccount> ")
+    pass_key = input("\tAuto-generate?[y/n]> ")
+
+    if pass_key in ["y", "yes", "s", "si", "Y", "Yes"]:
+        pass_key = create_pass_key()
+    else:
+        pass_key = input("\t\tKey> ")
+
+    added = DB.add_pass_key(pass_key, service.lower(), account)
+    if added:
+        print()
+        print("\tDone!")
+
+
+def change_passKey(DB):
+    """ UI to change a password """
+
+    service = input("\tService> ")
+    account = input("\tAccount> ")
+    new_key = input("\tNew Key> ")
+
+    change = DB.change_pass_key(new_key, service.lower(), account)
+    if change:
+        print()
+        print("\tChanged!")
+
+
+def get_passKey(DB):
+    """ UI to get a password """
+
+    service = input("\tService> ")
+    account = input("\tAccount> ")
+
+    result = DB.get_pass_key(service.lower(), account)
+    if result:
+        print_result(result)
+
+
+def get_service(DB):
+    """ UI to get services """
+
+    account = input("\tAccount> ")
+
+    services = DB.get_services(account)
+    if services:
+        print_result(services)
+
+
+def get_account(DB):
+    """ UI to get accounts """
+
+    service = input("\tService> ")
+
+    accounts = DB.get_accounts(service.lower())
+    if accounts:
+        print_result(accounts)
+
+
 if __name__ == '__main__':
     print("Enter Master Password")
 
@@ -43,52 +105,15 @@ if __name__ == '__main__':
 
     while option != "q":
         if option == "sp":
-            service = input("\tService> ")
-            account = input("\tAccount> ")
-            pass_key = input("\tAuto-generate?[y/n]> ")
-
-            if pass_key in ["y", "yes", "s", "si", "Y", "Yes"]:
-                pass_key = create_pass_key()
-            else:
-                pass_key = input("\t\tKey> ")
-
-            added = DB.add_pass_key(pass_key, service.lower(), account)
-            if added:
-                print()
-                print("\tDone!")
-
+            set_passKey(DB)
         elif option == "cp":
-            service = input("\tService> ")
-            account = input("\tAccount> ")
-            new_key = input("\tNew Key> ")
-
-            change = DB.change_pass_key(new_key, service.lower(), account)
-            if change:
-                print()
-                print("\tChanged!")
-
+            change_passKey(DB)
         elif option == "gp":
-            service = input("\tService> ")
-            account = input("\tAccount> ")
-
-            result = DB.get_pass_key(service.lower(), account)
-            if result:
-                print_result(result)
-
+            get_passKey(DB)
         elif option == "gs":
-            account = input("\tAccount> ")
-
-            services = DB.get_services(account)
-            if services:
-                print_result(services)
-
+            get_service(DB)
         elif option == "ga":
-            service = input("\tService> ")
-
-            accounts = DB.get_accounts(service.lower())
-            if accounts:
-                print_result(accounts)
-
+            get_account(DB)
         elif option == "gall":
             result = DB.get_all()
             if result:
