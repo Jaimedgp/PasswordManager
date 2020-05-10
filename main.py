@@ -6,13 +6,14 @@ import sys
 import os
 
 
-enter_menu = ("#"*15 + "\n" +
+enter_menu = ("#"*25 + "\n" +
               "## q => quit program\n" +
               "## sp => set password\n" +
               "## cp => change password\n" +
               "## gp => get password\n" +
               "## gs => get services\n" +
               "## ga => get account\n" +
+              "## gall => get all acounts and services\n" +
               "#"*35 + "\n")
 
 
@@ -21,7 +22,7 @@ def print_result(result):
 
     print()
     for i, name in enumerate(result.fetchall()):
-        print("\t{0}) ".format(i+1) + name[0])
+        print("\t{0}) ".format(i+1) + " -> ".join(name))
 
 
 if __name__ == '__main__':
@@ -82,5 +83,10 @@ if __name__ == '__main__':
             accounts = DB.get_accounts(service.lower())
             if accounts:
                 print_result(accounts)
+
+        elif option == "gall":
+            result = DB.get_all()
+            if result:
+                print_result(result)
 
         option = input(": ")

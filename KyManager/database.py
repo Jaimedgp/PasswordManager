@@ -112,6 +112,20 @@ class DataBase():
             return 0
 
 
+    def get_all(self):
+        """ Get all services and account """
+
+        try:
+            result = self.connect.execute("""
+                SELECT pssKy.service, pssKy.account
+                    FROM PASS_KEY pssKy;
+                """)
+
+            return result
+        except:
+            return 0
+
+
     def drop_tables(self):
         """ delete all the tables of the database """
 
