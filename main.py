@@ -28,6 +28,14 @@ def check_password(pss_key):
         return False
 
 
+def print_result(result):
+    """ Print the results of a database consult """
+
+    print()
+    for i, name in enumerate(result.fetchall()):
+        print("\t{0}) ".format(i) + name[0])
+
+
 if __name__ == '__main__':
     print("Enter Master Password")
 
@@ -69,21 +77,21 @@ if __name__ == '__main__':
 
             result = DB.get_pass_key(service.lower(), account)
             if result:
-                print(result.fetchone())
+                print_result(result)
 
         elif option == "gs":
             account = input("\tAccount> ")
 
             services = DB.get_services(account)
             if services:
-                print(services.fetchone())
+                print_result(services)
 
         elif option == "ga":
             service = input("\tService> ")
 
             accounts = DB.get_accounts(service.lower())
             if accounts:
-                print(accounts.fetchone())
+                print_result(accounts)
 
         option = input(": ")
 
