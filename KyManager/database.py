@@ -126,6 +126,21 @@ class DataBase():
             return 0
 
 
+    def remove_pass_key(self, service, account):
+        """ remove password of a service and account """
+
+        try:
+            self.connect.execute("""
+                DELETE FROM PASS_KEY
+                    WHERE service = '{0}' AND account = '{1}'
+                """.format(service, account))
+            self.connect.commit()
+
+            return 1
+        except:
+            return 0
+
+
     def drop_tables(self):
         """ delete all the tables of the database """
 

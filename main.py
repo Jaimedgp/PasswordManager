@@ -10,6 +10,7 @@ enter_menu = ("#"*25 + "\n" +
               "## q => quit program\n" +
               "## sp => set password\n" +
               "## cp => change password\n" +
+              "## rp => remove password\n" +
               "## gp => get password\n" +
               "## gs => get services\n" +
               "## ga => get account\n" +
@@ -56,6 +57,17 @@ def change_passKey(DB):
     if change:
         print()
         print("\tChanged!")
+
+
+def remove_passKey(DB):
+    """ UI to remove a password """
+
+    service = input("\tService> ")
+    account = input("\tAccount> ")
+
+    result = DB.remove_pass_key(service.lower(), account)
+    if result:
+        print("\tDeleted!")
 
 
 def get_passKey(DB):
@@ -110,6 +122,8 @@ if __name__ == '__main__':
             set_passKey(DB)
         elif option == "cp":
             change_passKey(DB)
+        elif option == "rp":
+            remove_passKey(DB)
         elif option == "gp":
             get_passKey(DB)
         elif option == "gs":
