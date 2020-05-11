@@ -67,6 +67,7 @@ def remove_passKey(DB):
 
     result = DB.remove_pass_key(service.lower(), account)
     if result:
+        print()
         print("\tDeleted!")
 
 
