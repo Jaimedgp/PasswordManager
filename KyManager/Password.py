@@ -19,6 +19,15 @@ def check_password(pss_key):
     return bool(new_hash == pss_hash)
 
 
+def check_private_key(private_file, master_hash):
+    """ Check if private key is correct """
+
+    private_key = open(private_file, "r").read()
+    key_hash = sha256(private_key.encode('utf-8')).hexdigest()
+
+    return bool(key_hash == master_key)
+
+
 def create_pass_key():
     """
         Generate a password with 16 characters
