@@ -1,8 +1,16 @@
+"""
+    Module with all the functions related to passwords or
+    private key used to sign into the database
+
+    @author Jaimedgp
+    @date May, 2020
+"""
+
 from hashlib import sha256
 from numpy.random import randint
 
 
-alphabet = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+ALPHABET = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             + "abcdefghijklmnopqrstuvwxyz"
             + "1234567890"
             +",.?!@#$%&*(){}[]:;-_=+ ")
@@ -25,24 +33,23 @@ def check_private_key(private_file, master_hash):
     private_key = open(private_file, "r").read()
     key_hash = sha256(private_key.encode('utf-8')).hexdigest()
 
-    return bool(key_hash == master_key)
+    return bool(key_hash == master_hash)
 
 
 def create_pass_key():
-    """
-        Generate a password with 16 characters
-            selected randomly from alphabet
-    """
+    """ Generate a password with 16 characters
+          selected randomly from ALPHABET     """
 
-    index = randint(0, len(alphabet), 32)
 
-    while (index[-1] == alphabet.index(" ")
-           or index[0] == alphabet.index(" ")):
+    index = randint(0, len(ALPHABET), 32)
 
-        index = randint(0, len(alphabet), 32)
+    while (index[-1] == ALPHABET.index(" ")
+           or index[0] == ALPHABET.index(" ")):
+
+        index = randint(0, len(ALPHABET), 32)
 
     pass_key = ""
     for i in index:
-        pass_key += alphabet[i]
+        pass_key += ALPHABET[i]
 
     return pass_key

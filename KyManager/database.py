@@ -1,3 +1,11 @@
+"""
+    Module with the database object used to connect into database
+    and interact with it
+
+    @author Jaimedgp
+    @date May, 2020
+"""
+
 import sqlite3
 
 class DataBase():
@@ -14,9 +22,9 @@ class DataBase():
         self.connect = sqlite3.connect(database)
 
         # Check if database exists yet
-        result = self.create_database()
-        if result:
-            print("Dabase exists")
+        is_new = self.create_database()
+        if not is_new:
+            print("\nDabase exists!\n")
 
 
     def create_database(self):
@@ -32,7 +40,9 @@ class DataBase():
 
                     CONSTRAINT unq_srvc_accnt UNIQUE (service, account)
                 ); """)
-        except:
+            self.connect.commit()
+            return 1
+        except sqlite3.OperationalError:
             return 0
 
 
@@ -47,7 +57,7 @@ class DataBase():
                 """.format(service, account))
 
             return pass_key
-        except:
+        except sqlite3.OperationalError:
             return 0
 
 
@@ -62,7 +72,7 @@ class DataBase():
             self.connect.commit()
 
             return 1
-        except:
+        except sqlite3.OperationalError:
             return 0
 
 
@@ -78,7 +88,7 @@ class DataBase():
 
             self.connect.commit()
             return 1
-        except:
+        except sqlite3.OperationalError:
             return 0
 
 
@@ -93,7 +103,7 @@ class DataBase():
                 """.format(service))
 
             return accounts
-        except:
+        except sqlite3.OperationalError:
             return 0
 
 
@@ -108,7 +118,7 @@ class DataBase():
                 """.format(account))
 
             return services
-        except:
+        except sqlite3.OperationalError:
             return 0
 
 
@@ -124,7 +134,7 @@ class DataBase():
                 """)
 
             return result
-        except:
+        except sqlite3.OperationalError:
             return 0
 
 
@@ -139,7 +149,7 @@ class DataBase():
             self.connect.commit()
 
             return 1
-        except:
+        except sqlite3.OperationalError:
             return 0
 
 
@@ -155,5 +165,5 @@ class DataBase():
                 """)
 
             return master_key
-        except:
+        except sqlite3.OperationalError:
             return 0
