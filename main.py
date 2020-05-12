@@ -138,8 +138,6 @@ if __name__ == '__main__':
         IS_PRIVATE_KEY = check_private_key(input("Private Key File: "),
                                            DB.get_master_key().fetchone()[0])
 
-                #private_key_file, master_hash)
-
         if not IS_PRIVATE_KEY:
             sys.exit()
         os.system('cls' if os.name == 'nt' else 'clear')
