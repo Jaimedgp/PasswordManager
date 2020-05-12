@@ -118,7 +118,9 @@ class DataBase():
         try:
             result = self.connect.execute("""
                 SELECT pssKy.service, pssKy.account
-                    FROM PASS_KEY pssKy;
+                    FROM PASS_KEY pssKy
+                    WHERE pssKy.service <> 'Master'
+                        AND pssKy.account <> 'Master;
                 """)
 
             return result
@@ -141,8 +143,17 @@ class DataBase():
             return 0
 
 
-    def drop_tables(self):
-        """ delete all the tables of the database """
+    def get_master_key(self):
+        """ get master key to check private key """
 
-        self.connect.execute("DROP TABLE PASS_KEY;")
-        self.connect.commit()
+        try:
+            master_key = self.connect.execute("""
+                SELECT pssKy.pass_key
+                    FROM PASS_KEY pssKy
+                    WHERE pssKy.service = 'Master'
+                        AND pssKy.account = 'Master';
+                """)
+
+            return master_key
+        except:
+            return 0
