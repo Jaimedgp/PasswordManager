@@ -27,6 +27,23 @@ def check_password(pss_key):
     return bool(new_hash == pss_hash)
 
 
+def create_pass_key(key_size):
+    """ Generate a password with key_size characters
+               selected randomly from ALPHABET       """
+
+
+    index = randint(0, len(ALPHABET), key_size)
+
+    while (index[-1] == ALPHABET.index(" ")
+           or index[0] == ALPHABET.index(" ")):
+
+        index = randint(0, len(ALPHABET), key_size)
+
+    pass_key = "".join([ALPHABET[i] for i in index])
+
+    return pass_key
+
+
 def check_private_key(private_file, master_hash):
     """ Check if private key is correct """
 
@@ -34,22 +51,3 @@ def check_private_key(private_file, master_hash):
     key_hash = sha256(private_key.encode('utf-8')).hexdigest()
 
     return bool(key_hash == master_hash)
-
-
-def create_pass_key():
-    """ Generate a password with 16 characters
-          selected randomly from ALPHABET     """
-
-
-    index = randint(0, len(ALPHABET), 32)
-
-    while (index[-1] == ALPHABET.index(" ")
-           or index[0] == ALPHABET.index(" ")):
-
-        index = randint(0, len(ALPHABET), 32)
-
-    pass_key = ""
-    for i in index:
-        pass_key += ALPHABET[i]
-
-    return pass_key
