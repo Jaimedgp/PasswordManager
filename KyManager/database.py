@@ -22,9 +22,7 @@ class DataBase():
         self.connect = sqlite3.connect(database)
 
         # Check if database exists yet
-        is_new = self.create_database()
-        if not is_new:
-            print("\nDabase exists!\n")
+        self.create_database()
 
 
     def create_database(self):
@@ -43,7 +41,7 @@ class DataBase():
             self.connect.commit()
             return 1
         except sqlite3.OperationalError:
-            return 0
+            print("\nThe Database has just been created!\n")
 
 
     def get_pass_key(self, service, account):
