@@ -45,10 +45,10 @@ def create_pass_key(key_size):
     return pass_key
 
 
-def check_private_key(private_key, master_hash):
+def check_private_key(rsa, master_hash):
     """ Check if private key is correct """
 
-    key_hash = sha256(private_key).hexdigest()
+    key_hash = sha256(rsa.get_private_key()).hexdigest()
 
     return bool(key_hash == master_hash)
 
@@ -61,7 +61,7 @@ def init_rsa(key_size, key_file, database):
     rsa = Rsa(key_size=key_size)
 
     # save private key hash into the database
-    key_hash = sha256(rsa.private_key).hexdigest()
+    key_hash = sha256(rsa.get_private_key()).hexdigest()
     database.connect.execute("""
             INSERT INTO PASS_KEY(pass_key, service, account)
                 VALUES ('{0}', 'Master', 'Master');
