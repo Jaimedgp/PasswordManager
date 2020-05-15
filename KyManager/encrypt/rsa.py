@@ -107,3 +107,9 @@ class Rsa():
 
         digest.update(message)
         return signer.verify(digest, signature)
+
+
+    def get_private_key(self):
+        """ Get the private key by calculate the hash """
+
+        return self.export_private_key().encode('utf-8')
