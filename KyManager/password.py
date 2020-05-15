@@ -8,6 +8,7 @@
 
 from hashlib import sha256
 from numpy.random import randint
+from KyManager.encrypt.rsa import Rsa
 
 
 ALPHABET = ("ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -44,10 +45,31 @@ def create_pass_key(key_size):
     return pass_key
 
 
-def check_private_key(private_file, master_hash):
+def check_private_key(private_key, master_hash):
     """ Check if private key is correct """
 
-    private_key = open(private_file, "r").read()
-    key_hash = sha256(private_key.encode('utf-8')).hexdigest()
+    key_hash = sha256(private_key).hexdigest()
 
     return bool(key_hash == master_hash)
+
+
+def init_rsa(key_size, key_file, database):
+    """ Initialize RSA keys storing its hash in the
+        database and the private key in a file      """
+
+    # Create the private Key
+    rsa = Rsa(key_size=key_size)
+
+    # save private key hash into the database
+    key_hash = sha256(rsa.private_key).hexdigest()
+    database.connect.execute("""
+            INSERT INTO PASS_KEY(pass_key, service, account)
+                VALUES ('{0}', 'Master', 'Master');
+            """.format(key_hash))
+    database.connect.commit()
+
+    # Save private key into a file
+    with open(key_file, 'w') as file:
+        file.write(rsa.export_private_key())
+
+    return rsa
