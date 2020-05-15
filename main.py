@@ -13,7 +13,8 @@ from getpass import getpass
 
 from KyManager.database import DataBase
 from KyManager.password import check_password, check_private_key
-from KyManager.password import create_pass_key
+from KyManager.password import create_pass_key, init_rsa
+from KyManager.encrypt.rsa import Rsa
 
 
 ENTER_MENU = ("#"*25 + "\n" +
@@ -54,7 +55,28 @@ def print_result(results):
         print("\t{0}) ".format(i+1) + " -> ".join(name))
 
 
-def set_passkey(database):
+def enter_private_key(database):
+    """ obtain the private key to use in the database """
+
+    master_hash = database.get_master_key().fetchone()
+
+    if not master_hash:
+        print("\nThere is not any Master Key in the database")
+        create = input("Want to create a new one? [Y/N]")
+
+        if create not in ["y", "yes", "s", "si", "Y", "Yes"]:
+            sys.exit()
+
+        rsa = init_rsa(key_size=3072, key_file="./private_key.txt",
+                       database=database)
+        master_hash = database.get_master_key()
+    else:
+        rsa = Rsa(key_file=input("\nPrivate key file: "))
+
+    return check_private_key(rsa, master_hash[0]), rsa
+
+
+def set_passkey(database, rsa):
     """ UI to set a new password """
 
     service = input("\tService> ")
@@ -62,23 +84,25 @@ def set_passkey(database):
     pass_key = input("\tAuto-generate?[y/n]> ")
 
     if pass_key in ["y", "yes", "s", "si", "Y", "Yes"]:
-        pass_key = create_pass_key()
+        pass_key = create_pass_key(32)
     else:
         pass_key = input("\t\tKey> ")
 
-    added = database.add_pass_key(pass_key, service.lower(), account)
+    encrypt_key = rsa.encrypt(pass_key)
+    added = database.add_pass_key(encrypt_key, service.lower(), account)
     if added:
         print()
         print("\tDone!")
 
 
-def change_passkey(database):
+def change_passkey(database, rsa):
     """ UI to change a password """
 
     service = input("\tService> ")
     account = input("\tAccount> ")
     new_key = input("\tNew Key> ")
 
+    encrypt_key = rsa.encrypt(pass_key)
     change = database.change_pass_key(new_key, service.lower(), account)
     if change:
         print()
@@ -135,8 +159,7 @@ if __name__ == '__main__':
     if IS_MASTER_KEY:
         DB = DataBase("pass_test.db")
 
-        IS_PRIVATE_KEY = check_private_key(input("Private Key File: "),
-                                           DB.get_master_key().fetchone()[0])
+        IS_PRIVATE_KEY, RSA = enter_private_key(DB)
 
         if not IS_PRIVATE_KEY:
             sys.exit()
