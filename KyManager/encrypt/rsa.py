@@ -46,13 +46,13 @@ class Rsa():
 
         key = open(key_file, 'r').read()
 
-        self.private_key = RSA.importKey(key.encode('ascii'))
+        self.private_key = RSA.importKey(key.encode('utf-8'))
 
 
     def export_private_key(self):
-        """ Export private key decoding in ascii code """
+        """ Export private key decoding in utf-8 code """
 
-        return self.private_key.exportKey().decode('ascii')
+        return self.private_key.exportKey().decode('utf-8')
 
 
     def encrypt(self, message):
