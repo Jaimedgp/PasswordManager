@@ -127,8 +127,8 @@ class DataBase():
             result = self.connect.execute("""
                 SELECT pssKy.service, pssKy.account
                     FROM PASS_KEY pssKy
-                    WHERE pssKy.service <> 'Master'
-                        AND pssKy.account <> 'Master;
+                    WHERE pssKy.service != 'Master'
+                        AND pssKy.account != 'Master';
                 """)
 
             return result
