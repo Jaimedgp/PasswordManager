@@ -59,14 +59,14 @@ class Rsa():
         """ Encrypt message using the public key """
 
         cipher = PKCS1_OAEP.new(self.public_key)
-        return cipher.encrypt(message)
+        return cipher.encrypt(message.encode('utf-8'))
 
 
     def decrypt(self, ciphertext):
         """ Decrypt a ciphertext using the private key """
 
         cipher = PKCS1_OAEP.new(self.private_key)
-        return cipher.decrypt(ciphertext)
+        return cipher.decrypt(ciphertext).decode('utf-8')
 
 
     def sign(self, message, hash_alg="SHA-256"):

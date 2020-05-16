@@ -32,16 +32,18 @@ class DataBase():
             self.connect.execute("""
                 CREATE TABLE PASS_KEY (
                     idpass INTEGER PRIMARY KEY AUTOINCREMENT,
-                    pass_key VARCHAR(200) NOT NULL UNIQUE,
+                    pass_key VARCHAR(500) NOT NULL UNIQUE,
                     service VARCHAR(200) NOT NULL,
                     account VARCHAR(200) NOT NULL,
 
                     CONSTRAINT unq_srvc_accnt UNIQUE (service, account)
                 ); """)
             self.connect.commit()
+
+            print("\nThe Database has just been created!\n")
             return 1
         except sqlite3.OperationalError:
-            print("\nThe Database has just been created!\n")
+            return 0
 
 
     def get_pass_key(self, service, account):
@@ -65,12 +67,13 @@ class DataBase():
         try:
             self.connect.execute("""
                 INSERT INTO PASS_KEY(pass_key, service, account)
-                    VALUES ('{0}', '{1}', '{2}');
-                """.format(pass_key, service, account))
+                    VALUES (?,?,?);
+                """, (pass_key, service, account))
             self.connect.commit()
 
             return 1
-        except sqlite3.OperationalError:
+        except sqlite3.OperationalError as e:
+            print(e)
             return 0
 
 

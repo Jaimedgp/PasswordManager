@@ -51,7 +51,7 @@ def print_result(results):
     """ Print the results of a database consult """
 
     print()
-    for i, name in enumerate(results.fetchall()):
+    for i, name in enumerate(results):
         print("\t{0}) ".format(i+1) + " -> ".join(name))
 
 
@@ -69,7 +69,7 @@ def enter_private_key(database):
 
         rsa = init_rsa(key_size=3072, key_file="./private_key.txt",
                        database=database)
-        master_hash = database.get_master_key()
+        master_hash = database.get_master_key().fetchone()
     else:
         rsa = Rsa(key_file=input("\nPrivate key file: "))
 
@@ -102,8 +102,8 @@ def change_passkey(database, rsa):
     account = input("\tAccount> ")
     new_key = input("\tNew Key> ")
 
-    encrypt_key = rsa.encrypt(pass_key)
-    change = database.change_pass_key(new_key, service.lower(), account)
+    encrypt_key = rsa.encrypt(new_key)
+    change = database.change_pass_key(encrypt_key, service.lower(), account)
     if change:
         print()
         print("\tChanged!")
@@ -121,15 +121,17 @@ def remove_passkey(database):
         print("\tDeleted!")
 
 
-def get_passkey(database):
+def get_passkey(database, rsa):
     """ UI to get a password """
 
     service = input("\tService> ")
     account = input("\tAccount> ")
 
     pass_key = database.get_pass_key(service.lower(), account)
+
     if pass_key:
-        print_result(pass_key)
+        key = [(rsa.decrypt(i[0]), ) for i in pass_key.fetchall()]
+        print_result(key)
 
 
 def get_service(database):
@@ -139,7 +141,7 @@ def get_service(database):
 
     services = database.get_services(account)
     if services:
-        print_result(services)
+        print_result(services.fetchall())
 
 
 def get_account(database):
@@ -149,7 +151,7 @@ def get_account(database):
 
     accounts = database.get_accounts(service.lower())
     if accounts:
-        print_result(accounts)
+        print_result(accounts.fetchall())
 
 
 if __name__ == '__main__':
@@ -170,13 +172,13 @@ if __name__ == '__main__':
 
         while OPTION != "q":
             if OPTION == "sp":
-                set_passkey(DB)
+                set_passkey(DB, RSA)
             elif OPTION == "cp":
-                change_passkey(DB)
+                change_passkey(DB, RSA)
             elif OPTION == "rp":
                 remove_passkey(DB)
             elif OPTION == "gp":
-                get_passkey(DB)
+                get_passkey(DB, RSA)
             elif OPTION == "gs":
                 get_service(DB)
             elif OPTION == "ga":
@@ -184,7 +186,7 @@ if __name__ == '__main__':
             elif OPTION == "gall":
                 RESULT = DB.get_all()
                 if RESULT:
-                    print_result(RESULT)
+                    print_result(RESULT.fetchall())
             elif OPTION in ["help", "Help"]:
                 print(ENTER_MENU)
 
